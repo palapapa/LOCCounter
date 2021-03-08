@@ -1,4 +1,6 @@
 # LOCCounter
+[![time tracker](https://wakatime.com/badge/github/palapapa/LOCCounter.svg)](https://wakatime.com/badge/github/palapapa/LOCCounter)
+<br>
 A simple tool that counts LOCs.
 <br>
 Command format:
