@@ -163,9 +163,11 @@ namespace LOCCounter
             {
                 return;
             }
+            excludedPaths.Add(path);
             foreach (string file in Directory.EnumerateFiles(path))
             {
                 ScanFile(file, excludedPaths, extensions, isExcludeExtension, ref LOCs, ref totalLines);
+                excludedPaths.Add(file);
             }
             if (isRecursive)
             {
