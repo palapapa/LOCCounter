@@ -32,13 +32,11 @@ namespace LOCCounter
                 for (int i = 0; i < paths.Length; i++)
                 {
                     paths[i] = paths[i].Trim();
-                    paths[i] = paths[i].ToLower();
                 }
                 string[] extensions = arguments[1].Split(',', StringSplitOptions.RemoveEmptyEntries);
                 for (int i = 0; i < extensions.Length; i++)
                 {
                     extensions[i] = extensions[i].Trim();
-                    extensions[i] = extensions[i].ToLower();
                 }
                 if (Array.TrueForAll(extensions, extension => string.IsNullOrWhiteSpace(extension)))
                 {
@@ -161,7 +159,7 @@ namespace LOCCounter
 
         private static void ScanDirectory(string path, List<string> excludedPaths, string[] extensions, bool isExcludeExtension, ref string LOCs, ref int totalLines, bool isRecursive)
         {
-            if (excludedPaths.Contains(path))
+            if (excludedPaths.ContainsIgnoreCase(path))
             {
                 return;
             }
@@ -180,7 +178,7 @@ namespace LOCCounter
 
         private static void ScanFile(string file, List<string> excludedPaths, string[] extensions, bool isExcludeExtension, ref string LOCs, ref int totalLines)
         {
-            if (!excludedPaths.Contains(file) && extensions.Any(s => file.EndsWith(s)) == !isExcludeExtension)
+            if (!excludedPaths.ContainsIgnoreCase(file) && extensions.Any(s => file.EndsWith(s)) == !isExcludeExtension)
             {
                 int lines = File.ReadLines(file).Count();
                 LOCs += $"{file}: {lines} lines\n";
