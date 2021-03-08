@@ -63,7 +63,7 @@ namespace LOCCounter
                 List<string> includedPaths = new List<string>();
                 List<string> excludedPaths = new List<string>();
                 string LOCs = "";
-                int totalLines = 0;
+                long totalLines = 0;
                 foreach (string path in paths)
                 {
                     if (path.StartsWith('?'))
@@ -157,7 +157,7 @@ namespace LOCCounter
             return errorText;
         }
 
-        private static void ScanDirectory(string path, List<string> excludedPaths, string[] extensions, bool isExcludeExtension, ref string LOCs, ref int totalLines, bool isRecursive)
+        private static void ScanDirectory(string path, List<string> excludedPaths, string[] extensions, bool isExcludeExtension, ref string LOCs, ref long totalLines, bool isRecursive)
         {
             if (excludedPaths.ContainsIgnoreCase(path))
             {
@@ -178,11 +178,19 @@ namespace LOCCounter
             }
         }
 
-        private static void ScanFile(string file, List<string> excludedPaths, string[] extensions, bool isExcludeExtension, ref string LOCs, ref int totalLines)
+        private static void ScanFile(string file, List<string> excludedPaths, string[] extensions, bool isExcludeExtension, ref string LOCs, ref long totalLines)
         {
             if (!excludedPaths.ContainsIgnoreCase(file) && extensions.Any(s => file.EndsWith(s)) == !isExcludeExtension)
             {
-                int lines = File.ReadLines(file).Count();
+                long lines = 0;
+                try
+                {
+                    lines = File.ReadLines(file).Count();
+                }
+                catch (UnauthorizedAccessException)
+                {
+                    return;
+                }
                 LOCs += $"{file}: {lines} lines\n";
                 totalLines += lines;
             }
