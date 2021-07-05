@@ -98,7 +98,11 @@ namespace LOCCounter
         {
             string errorText = "";
             string[] arguments = command.Split(';', StringSplitOptions.None);
-            string[] paths = arguments[0].Split('|');
+            string[] paths = arguments[0].Split('|', StringSplitOptions.RemoveEmptyEntries);
+            for (int i = 0; i < paths.Length; i++)
+            {
+                paths[i] = paths[i].Trim();
+            }
             if (arguments.Length != 4)
             {
                 errorText += $"Incorrect argument count({arguments.Length} provided, should be 4)\n";
@@ -140,18 +144,18 @@ namespace LOCCounter
             }
             foreach (string path in paths)
             {
-                string trimed;
+                string trimmed;
                 if (path.StartsWith('?'))
                 {
-                    trimed = path.Remove(0, 1);
+                    trimmed = path.Remove(0, 1);
                 }
                 else
                 {
-                    trimed = path;
+                    trimmed = path;
                 }
-                if (!File.Exists(trimed) && !Directory.Exists(trimed) && !string.IsNullOrWhiteSpace(trimed) && !trimed.StartsWith('?'))
+                if (!File.Exists(trimmed) && !Directory.Exists(trimmed) && !string.IsNullOrWhiteSpace(trimmed) && !trimmed.StartsWith('?'))
                 {
-                    errorText += $"{trimed}: No such file or directory\n";
+                    errorText += $"{trimmed}: No such file or directory\n";
                 }
             }
             return errorText;
